@@ -52,14 +52,15 @@ df[['col1', 'col2']] = df[['col1', 'col2']].astype('float')
 #### Describe statistics
 
 ```
-df.describe()
-
+df.describe() #show all columns
+df[['col1', 'col2']].describe() #show only specific columns
 ```
-## Counting & Unique Values
+#### Counting & Unique Values
 
 ```
 unique_values = df['Column'].unique()
 value_counts = df['Column'].value_counts()
+df['column_name'].value_counts().idxmax() #counts most frequent
 ```
 
 #### Correlation between numeric columns
@@ -79,12 +80,20 @@ df.reset_index(inplace=True)
 df['column']
 df[['col1', 'col2']]
 ```
-#### Filtering rows
+#### Filtering
 ```
 df[df['column'] > 10]
 
 ```
 ## Modifying DataFrame
+
+#### Add Headers
+
+```
+headers = ["Manufacturer", "Price"]
+df.columns = headers
+print(df.head())
+```
 
 #### Rename columns
 ```
@@ -94,18 +103,23 @@ df.rename(columns={'old_name': 'new_name'}, inplace=True)
 #### Add a new column
 ```
 df['NewColumn'] = df['Column1'] * 2
+df['Total'] = df['ColumnName'].sum(axis=1)      
 
 ```
 #### Drop a column
 ```
+
 df.drop('Column1', axis=1, inplace=True)
 
 ```
-### Aggregation & Grouping
+
+## Aggregation & Grouping
 
 ##### Group by operation
 ```
 df_group = df.groupby(['col1']).mean()
+df_group = df.groupby(['col1']).count()
+df_group = df.groupby(['col1']).sum()
 
 ```
 #### Pivot table
@@ -116,32 +130,49 @@ df.pivot_table(values='Value', index='Row', columns='Column', aggfunc='mean')
 
 ## Handling Missing Data
 
+#### Null values
+```
+
+df.isnull().sum()
+
+```
+
 #### Remove missing values
 ```
 df.dropna(subset=['column'], inplace=True)
+df.dropna(subset=[“column_name”],axis=0,inplace=True)
+```       
 
-```
 #### Fill missing values
 ```
-df.fillna(0, inplace=True)
-df['column'].replace(np.nan, 'default_value', inplace=True)
+
+df.fillna(0, inplace=True) #Fill with zeros
+
+```
+#### Replace missing values
 ```
 
-#### Sorting & Ordering
+df['column'].replace(np.nan, 'default_value', inplace=True)
+
+```
+
+## Sorting & Ordering
 ```
 df.sort_values(by='column', ascending=False, inplace=True)
 
 ```
 
-### Statistical & Mathematical Operations
+## Statistical & Mathematical Operations
 
 ##### Column-wise operations
 ```
 df['Total'] = df.sum(axis=1)
-df['Mean'] = df['Column'].mean()
+Mean_value = df['Column'].mean()
+Max_value = df['ColumnName'].max()
+Min_Values = df['ColumnName'].min()                  
 ```
 
-### Merging & Joining DataFrames
+## Merging & Joining DataFrames
 
 #### Merge DataFrames
 ```
@@ -149,20 +180,20 @@ pd.merge(df1, df2, on='key')
 
 ```
 
-#### Concatenation
+#### Concatenate
 ```
 df = pd.concat([df1, df2], axis=1)
 
 ```
 
-### Working with Dates
+## Working with Dates
 ```
-df['Date'] = pd.to_datetime(df['Date'])
-df['Year'] = df['Date'].dt.year
+df['Date'] = pd.to_datetime(df['Date']) #Conversion to Date
+df['Year'] = df['Date'].dt.year 
 df['Month'] = df['Date'].dt.month
 ```
 
-### String Operations
+## String Operations
 ```
 df['column'].str.contains('text')
 
